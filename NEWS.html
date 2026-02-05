@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DM NEWS // TECH </title>
+    <style>
+        /* --- RESET & FONTS --- */
+        :root {
+            --bg: #0e0e0e;
+
+
+            --primary-orange: #E95420;
+            --accent-purple: #772953;
+            --dark-purple: #2c001e;
+
+            --text-main: #ffffff;
+            --text-dim: #aeaeae;
+
+            --border-thick: 3px solid var(--primary-orange);
+
+            --font-serif: 'Times New Roman', serif;
+            --font-mono: 'Courier New', monospace;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,500;1,500&family=Playfair+Display:wght@900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'DM Mono', monospace;
+            overflow-x: hidden;
+            cursor: default;
+            position: relative;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+
+        .brand-absolute {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 3rem 2rem;
+            text-align: right;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .brand-text {
+            display: inline-block;
+            pointer-events: auto;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            line-height: 1;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+
+            background: linear-gradient(135deg, var(--primary-orange), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            filter: drop-shadow(0px 0px 15px rgba(233, 84, 32, 0.3));
+        }
+
+
+        .topic-center {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            /* Adjusted padding to align horizontally with other headers */
+            padding-top: 3rem;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            font-family: 'DM Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 500;
+            letter-spacing: -1px;
+            color: var(--primary-orange);
+            border: 2px solid var(--primary-orange);
+            padding: 0.2rem 2rem;
+            text-transform: uppercase;
+            background: rgba(14, 14, 14, 0.85);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 15px rgba(233, 84, 32, 0.2);
+        }
+
+        header.sticky-liquid {
+            position: sticky;
+            top: 0;
+            padding: 3rem 2rem;
+            width: fit-content;
+
+            background: transparent;
+            mix-blend-mode: exclusion;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            line-height: 0.8;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            color: #ffffff;
+            text-shadow: 4px 4px 0px var(--primary-orange);
+        }
+
+        #feed {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            border-top: 3px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to right, var(--primary-orange), var(--accent-purple));
+            margin-top: 1rem;
+        }
+
+        .article-card {
+            border-bottom: 1px solid var(--dark-purple);
+            padding: 4rem 2rem;
+            position: relative;
+            transition: background 0.2s, opacity 0.3s;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: start;
+            background: var(--bg);
+        }
+
+        .article-card:hover {
+            background: #150a12;
+        }
+
+        .article-card:nth-child(odd) {
+            grid-template-columns: 2fr 1fr;
+            border-left: 8px solid var(--primary-orange);
+        }
+
+        .article-card:nth-child(even) {
+            border-right: 8px solid var(--accent-purple);
+        }
+
+        .image-wrapper {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--text-dim);
+            filter: grayscale(100%) contrast(110%);
+            transition: all 0.4s ease;
+        }
+
+        .article-card:hover .image-wrapper {
+            filter: none;
+            border-color: var(--primary-orange);
+            box-shadow: 8px 8px 0px var(--accent-purple);
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            line-height: 0.95;
+            margin-bottom: 1rem;
+            transition: color 0.3s;
+            color: var(--text-main);
+        }
+
+        .article-card:hover .headline {
+            color: var(--primary-orange);
+        }
+
+        .meta-data {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+            display: flex;
+            gap: 1.5rem;
+            border-top: 1px solid var(--dark-purple);
+            padding-top: 0.8rem;
+        }
+
+        .snippet {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #ccc;
+            max-width: 95%;
+            border-left: 2px solid var(--dark-purple);
+            padding-left: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--text-main);
+            color: var(--text-main);
+            padding: 0.6rem 1.8rem;
+            font-family: 'DM Mono', monospace;
+            text-transform: uppercase;
+            font-weight: 700;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .btn:hover {
+            background: var(--text-main);
+            color: var(--bg);
+            box-shadow: 4px 4px 0px var(--primary-orange);
+            border-color: var(--text-main);
+        }
+
+        .btn-seen {
+            border-color: var(--primary-orange);
+            color: var(--primary-orange);
+        }
+
+        .btn-seen:hover {
+            background: var(--primary-orange);
+            color: #000;
+            box-shadow: 4px 4px 0px var(--accent-purple);
+            border-color: var(--primary-orange);
+        }
+
+        .article-card.is-seen {
+            opacity: 0.6;
+            filter: grayscale(60%);
+        }
+
+        .article-card.is-seen .headline {
+            color: #888;
+            text-decoration: line-through;
+            text-decoration-color: var(--primary-orange);
+            text-decoration-thickness: 3px;
+        }
+
+        .article-card.is-seen .btn-seen {
+            background: var(--primary-orange);
+            color: #000;
+            pointer-events: none;
+        }
+
+        .article-card.is-seen .btn-seen::after {
+            content: " [SEEN]";
+        }
+
+        @media (max-width: 768px) {
+
+            header.sticky-liquid,
+            .brand-absolute,
+            .topic-center {
+                position: relative;
+                width: 100%;
+                text-align: left;
+                padding: 1rem 1.5rem;
+            }
+
+            .brand-absolute {
+                text-align: left;
+                padding-top: 0;
+            }
+
+            .topic-center {
+                padding-top: 0.5rem;
+                text-align: left;
+            }
+
+            .topic-badge {
+                font-size: 1.5rem;
+                border-width: 2px;
+            }
+
+
+            header.sticky-liquid {
+                position: sticky;
+                top: 0;
+            }
+
+            .article-card,
+            .article-card:nth-child(odd) {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 3.5rem;
+            }
+
+            .brand-text {
+                font-size: 2rem;
+            }
+
+            .headline {
+                font-size: 2.2rem;
+            }
+        }
+
+        #status {
+            padding: 4rem;
+            text-align: center;
+            color: var(--primary-orange);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: blink 1.5s infinite ease-in-out;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="brand-absolute">
+        <div class="brand-text">
+            Picsart<br>Academy
+        </div>
+    </div>
+
+    <div class="topic-center">
+        <span class="topic-badge">Technology</span>
+    </div>
+
+    <header class="sticky-liquid">
+        <h1>DM<br>NEWS</h1>
+    </header>
+
+    <div id="status">Syncing Feed...</div>
+    <div id="feed" class="grid-container"></div>
+
+    <script>
+        const API_KEY = "pub_429b46b3afdb4c1aabe77cd687af0029";
+        const QUERY = "Technology";
+        const BASE_URL = "https://newsdata.io/api/1/news";
+
+        const feedContainer = document.getElementById('feed');
+        const statusDiv = document.getElementById('status');
+
+        function getSeenArticles() {
+            return JSON.parse(localStorage.getItem('seenArticles_v10') || '[]');
+        }
+
+        function markAsSeen(event, id) {
+            console.log("Marking as seen:", id);
+
+            const seen = getSeenArticles();
+            if (!seen.includes(id)) {
+                seen.push(id);
+                localStorage.setItem('seenArticles_v10', JSON.stringify(seen));
+            }
+
+            const card = document.getElementById(id);
+            if (card) {
+                card.classList.add('is-seen');
+            }
+        }
+
+        function renderArticle(article, index) {
+            if (!article.link) return;
+
+            const articleId = "art_" + index + "_" + article.link.replace(/[^a-zA-Z0-9]/g, "").substring(0, 15);
+
+            const isSeen = getSeenArticles().includes(articleId);
+
+            const card = document.createElement('article');
+            card.className = `article-card ${isSeen ? 'is-seen' : ''}`;
+            card.id = articleId;
+
+            const imgUrl = article.image_url || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+
+            let dateStr = "UNKNOWN DATE";
+            if (article.pubDate) {
+                dateStr = new Date(article.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            }
+
+            card.innerHTML = `
+                <div class="image-wrapper">
+                    <img src="${imgUrl}" alt="Tech Image" onerror="this.src='https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80'">
+                </div>
+                <div class="content">
+                    <div class="meta-data">
+                        <span>// ${article.source_id || 'UNKNOWN SOURCE'}</span>
+                        <span>[${dateStr}]</span>
+                    </div>
+                    
+                    <a href="${article.link}" target="_blank" onclick="markAsSeen(event, '${articleId}')">
+                        <h2 class="headline">${article.title}</h2>
+                    </a>
+                    
+                    <p class="snippet">${article.description ? article.description.substring(0, 200) + "..." : "CONTENT ENCRYPTED."}</p>
+                    <div class="actions">
+                        <a href="${article.link}" target="_blank" class="btn" onclick="markAsSeen(event, '${articleId}')">Read Source</a>
+                        <button class="btn btn-seen" onclick="markAsSeen(event, '${articleId}')">
+                            ${isSeen ? 'SEEN' : 'MARK SEEN'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            feedContainer.appendChild(card);
+        }
+
+        async function fetchNews() {
+            const requestUrl = `${BASE_URL}?apikey=${API_KEY}&q=${encodeURIComponent(QUERY)}&language=en&size=10`;
+
+            try {
+                const response = await fetch(requestUrl);
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    statusDiv.style.display = 'none';
+                    if (data.results && data.results.length > 0) {
+                        data.results.forEach((article, index) => renderArticle(article, index));
+                    } else {
+                        statusDiv.style.display = 'block';
+                        statusDiv.innerText = "NO DATA FOUND.";
+                    }
+                } else {
+                    throw new Error(data.results ? data.results.message : "API Error");
+                }
+            } catch (error) {
+                console.warn("API fetch failed. Loading fallback data.");
+                statusDiv.innerHTML = "CONNECTION FAILED. LOADING MOCK DATA...";
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                    loadFallbackData();
+                }, 1500);
+            }
+        }
+
+        function loadFallbackData() {
+            const fallbackArticles = [
+                {
+                    source_id: "Wired",
+                    title: "AI Consciousness: The Ghost in the Machine",
+                    description: "Researchers claim the latest neural networks are displaying emergent behavior that mimics biological sentience.",
+                    link: "https://example.com/1",
+                    image_url: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80",
+                    pubDate: "2026-02-05 08:30:00"
+                },
+                {
+                    source_id: "The Verge",
+                    title: "Quantum Computing Hits Consumer Markets",
+                    description: "A new startup promises a desktop quantum processor capable of breaking standard encryption in seconds.",
+                    link: "https://example.com/2",
+                    image_url: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80",
+                    pubDate: "2026-02-04 14:15:00"
+                },
+                {
+                    source_id: "TechCrunch",
+                    title: "The End of Silicon: Graphene Chips Are Here",
+                    description: "Major manufacturers are shifting foundries to graphene, promising 100x speed improvements at half the power.",
+                    link: "https://example.com/3",
+                    image_url: "https://images.unsplash.com/photo-1555664424-778a69022365?auto=format&fit=crop&w=800&q=80",
+                    pubDate: "2026-02-03 11:20:00"
+                },
+                {
+                    source_id: "Ars Technica",
+                    title: "Cyberpunk Reality: Neuralink's Next Phase",
+                    description: "Human trials for the visual cortex interface have begun, promising to restore sight with digital overlays.",
+                    link: "https://example.com/4",
+                    image_url: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80",
+                    pubDate: "2026-02-02 10:00:00"
+                }
+            ];
+            // Duplicate for demo
+            fallbackArticles.forEach((article, index) => renderArticle(article, index));
+            fallbackArticles.forEach((article, index) => renderArticle(article, index + 4));
+        }
+
+        fetchNews();
+
+    </script>
+</body>
+
+</html>
